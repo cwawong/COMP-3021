@@ -1,9 +1,14 @@
 package base;
 import java.io.File;
 public class TextNote extends Note{
-	private String content;
+	public String content;
 	public TextNote(String title) {
 		super(title);
 	}
+	public TextNote(String title, String content) {
+		super(title);
+		this.content = content;
+	}
+	
 
 }

@@ -1,6 +1,7 @@
 package base;
 import java.util.*;
-public class Folder {
+
+public class Folder implements Comparable<Folder>{
 	private ArrayList<Note> notes;
 	private String name;
 	
@@ -17,10 +18,68 @@ public class Folder {
 		return this.name;
 	}
 	
+	public void sortNotes() {
+		Collections.sort(notes);
+	}
+
 	public ArrayList<Note> getNotes(){
 		return notes;
 	}
+	
+	public boolean searchNotesHelper(String[] keywordsArrays, String searchArea) {
+		String binaryOutput = "";
+		searchArea = searchArea.toLowerCase();
 
+		String[] keywordsArray = new String[keywordsArrays.length];
+		for(int i = 0; i < keywordsArray.length; i++) keywordsArray[i] = keywordsArrays[i];
+		for(int i = 0; i < keywordsArray.length; i++) {
+			keywordsArray[i] = keywordsArray[i].toLowerCase();
+			if(keywordsArray[i].equals("or")) continue;
+			if(searchArea.contains(keywordsArray[i]) ) {
+				keywordsArray[i] = "1";
+			}else {
+				keywordsArray[i] = "0";
+			}
+		}
+		for(String k: keywordsArray) binaryOutput += k;
+		
+		
+
+		binaryOutput = "";
+		for(int i = 0; i < keywordsArray.length; i++) {
+			if(keywordsArray[i].equals("or")) {
+				if(keywordsArray[i - 1].equals("1") || keywordsArray[i + 1].equals("1")) {
+					keywordsArray[i] = "1";
+				}else {
+					keywordsArray[i] = "0";
+				}
+				keywordsArray[i - 1] = "";
+				keywordsArray[i + 1] = "";
+			}
+			
+		}
+		
+		for(String k: keywordsArray) {
+			binaryOutput += k;
+		}
+
+		for(int i = 0; i < binaryOutput.length(); i++) if(binaryOutput.charAt(i) == '0') return false;
+		return true;
+	}
+	public List<Note> searchNotes(String keywords){
+		List<Note> list = new ArrayList<Note>();
+		String[] keywordsArrays = keywords.split(" ", keywords.length());
+		for(Note n: notes) {
+			if(n instanceof ImageNote) {
+				if(searchNotesHelper(keywordsArrays,n.getTitle())) list.add(n);
+			}else {
+				if(searchNotesHelper(keywordsArrays,n.getTitle() + " " + ((TextNote)n).content)) list.add(n);
+			}
+		}
+		return list;
+			
+	}
+	
 	@Override
 	public String toString() {
 		int nText = 0;
@@ -60,6 +119,12 @@ public class Folder {
 		} else if (!name.equals(other.name))
 			return false;
 		return true;
+	}
+	@Override
+	public int compareTo(Folder o) {
+		// TODO Auto-generated method stub
+		return name.compareTo(o.name);
+		
 	}
 	
 	

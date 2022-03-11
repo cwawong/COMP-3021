@@ -18,6 +18,15 @@ public class NoteBook {
 	public ArrayList<Folder> getFolders() {
 		return folders;
 	}
+	
+	public List<Note> searchNotes(String keywords){
+		List<Note> list = new ArrayList<Note>();
+		for(Folder f: folders) { 
+			list.addAll(f.searchNotes(keywords)); 
+		}
+		return list;
+	
+	}
 	public boolean insertNote(String folderName, Note note) {
 		boolean found = false;
 		Folder folder = new Folder(folderName);
@@ -41,12 +50,26 @@ public class NoteBook {
 			}
 		}
 		if(found) {
-			System.out.println("Creating note " + note.getTitle( )+ " under folder " + folderName + " failed");
+			System.out.println("Creating note " + note.getTitle()+ " under folder " + folderName + " failed");
 			return false;
 		}else {
 			folder.addNote(note);
 			return true;
 		}
 		
+	}
+
+	public boolean createTextNote(String folderName, String title, String content) {
+		
+		TextNote note = new TextNote(title, content);
+		return insertNote(folderName, note);
+		
+		
+	}
+	public void sortFolders() {
+		for(Folder f:folders) {
+			f.sortNotes();
+		}
+		Collections.sort(folders);
 	}
 }
