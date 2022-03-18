@@ -1,10 +1,24 @@
 package base;
 import java.util.*;
+import java.io.*; 
 
-public class NoteBook {
+public class NoteBook implements Comparable<NoteBook>,Serializable{
 	private ArrayList<Folder> folders;
+	private static final long serialVersionUID = 1L;
 	public NoteBook() {
 		folders = new ArrayList<Folder>();
+	}
+	public NoteBook(String file) {
+		try {	
+			FileInputStream fis = null;
+			ObjectInputStream in = null;
+			fis = new FileInputStream(file);
+			in = new ObjectInputStream(fis);
+			NoteBook n = (NoteBook)in.readObject();
+			folders = n.getFolders();
+		}catch (Exception e) {
+			
+		}
 	}
 	public boolean createTextNote(String folderName, String title) {
 		TextNote note = new TextNote(title);
@@ -26,6 +40,25 @@ public class NoteBook {
 		}
 		return list;
 	
+	}
+	public boolean save(String file){
+		FileOutputStream fos = null;
+		ObjectOutputStream out = null;
+		try {
+			fos = new FileOutputStream(file);
+			out = new ObjectOutputStream(fos);
+			out.writeObject(this);
+			out.close();
+		} catch (Exception e) {
+			System.out.println(e);
+			return false;
+		}
+		return true;
+	}
+	@Override
+	public int compareTo(NoteBook o) {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 	public boolean insertNote(String folderName, Note note) {
 		boolean found = false;
