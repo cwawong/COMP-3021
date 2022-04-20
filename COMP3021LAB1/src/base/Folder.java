@@ -26,6 +26,22 @@ public class Folder implements Comparable<Folder>,Serializable{
 	public ArrayList<Note> getNotes(){
 		return notes;
 	}
+
+	public boolean removeNotes(String title){
+		int index = -1;
+		for(int i = 0; i < notes.size(); i++){
+			if(notes.get(i).getTitle().equals(title)) {
+				index = i;
+				break;
+			}
+		}
+		if(index >= 0){
+			notes.remove(index);
+			return true;
+		}else{
+			return false;
+		}
+	}
 	
 	public boolean searchNotesHelper(String[] keywordsArrays, String searchArea) {
 		String binaryOutput = "";

@@ -20,6 +20,11 @@ public class NoteBook implements Comparable<NoteBook>,Serializable{
 			
 		}
 	}
+	public void addFolder(String folderName) {
+		// TO DO
+		folders.add(new Folder(folderName));
+	}
+
 	public boolean createTextNote(String folderName, String title) {
 		TextNote note = new TextNote(title);
 		return insertNote(folderName, note);
